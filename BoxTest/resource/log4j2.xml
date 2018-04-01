@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn">
+   <!--定义输出的方式-->
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="[%-5p] %d %c - %m%n" />
+		</Console>
+		<File name="File" fileName="dist/my.log">
+			<PatternLayout pattern="[%-5p] %d %c - %m%n" />
+		</File>
+	</Appenders>
+<!-- 只有定义了logger并引入的appender，appender才会生效-->
+	<Loggers>
+		<Root level="debug">
+			<AppenderRef ref="File" />
+			<AppenderRef ref="Console" />
+		</Root>
+	</Loggers>
+</Configuration>
+

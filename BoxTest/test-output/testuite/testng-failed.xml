@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite guice-stage="DEVELOPMENT" name="Failed suite [testuite]" parallel="tests">
+  <test name="chrometest(failed)" parallel="tests">
+    <parameter name="browserType" value="3"/>
+    <classes>
+      <class name="com.cases.Box_Login_case">
+        <methods>
+          <include name="BeforeClass"/>
+          <include name="Box_Login_Page"/>
+          <include name="BeforeMethod"/>
+        </methods>
+      </class> <!-- com.cases.Box_Login_case -->
+    </classes>
+  </test> <!-- chrometest(failed) -->
+</suite> <!-- Failed suite [testuite] -->

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [Suite]">
+  <test name="Test(failed)">
+    <parameter name="driverType" value="2"/>
+    <classes>
+      <class name="com.cases.Box_Login_case">
+        <methods>
+          <include name="BeforeClass"/>
+          <include name="Box_Login_Page"/>
+          <include name="BeforeMethod"/>
+        </methods>
+      </class> <!-- com.cases.Box_Login_case -->
+    </classes>
+  </test> <!-- Test(failed) -->
+</suite> <!-- Failed suite [Suite] -->

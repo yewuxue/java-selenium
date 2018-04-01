@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Suite" parallel="tests">
+  	<test name="Test" preserve-order="true">
+  		<parameter name ="browserType" value ="1" />
+ 
+    	<classes>
+      		<class name="com.cases.Box_Login_case"/>
+   		</classes>
+    
+  </test> <!-- Test -->
+</suite> <!-- Suite -->

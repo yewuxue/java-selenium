@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- one project with multiple targets  -->
+<project name="test" default="transform2" basedir=".">
+	<!-- paths used -->
+	<property name="src.dir" value="src" />
+	<property name="conf.dir" value="conf" />
+	<property name="browsers.dir" value="browsers" />
+	<!--property name="data.dir" value="testdata" //测试数据--> 
+	<property name="dest.dir" value="build" />
+	<property name="dest.report" value="report" />
+	<property name="dest.report2" value="report2" />
+	<property name="resource.dir" value="resource" />
+	<path id="jarfile">
+		<fileset dir="lib" includes="ant-contrib-1.0b3.jar" />
+		<fileset dir="lib" includes="cglib-nodep-3.2.4.jar" />
+		<fileset dir="lib" includes="client-combined-3.0.1-nodeps.jar" />
+		<fileset dir="lib" includes="commons-codec-1.10.jar" />
+		<fileset dir="lib" includes="commons-exec-1.3.jar" />
+		<fileset dir="lib" includes="commons-io-2.5.jar" />
+		<fileset dir="lib" includes="commons-lang3-3.4.jar" />
+		<fileset dir="lib" includes="commons-logging-1.2.jar" />
+		<fileset dir="lib" includes="cssparser-0.9.20.jar" />
+		<fileset dir="lib" includes="gson-2.3.1.jar" />
+		<fileset dir="lib" includes="guava-19.0.jar" />
+		<fileset dir="lib" includes="hamcrest-core-1.3.jar" />
+		<fileset dir="lib" includes="hamcrest-library-1.3.jar" />
+		<fileset dir="lib" includes="htmlunit-2.23.jar" />
+		<fileset dir="lib" includes="htmlunit-core-js-2.23.jar" />
+		<fileset dir="lib" includes="httpclient-4.5.2.jar" />
+		<fileset dir="lib" includes="httpcore-4.4.4.jar" />
+		<fileset dir="lib" includes="httpmime-4.5.2.jar" />
+		<fileset dir="lib" includes="javax.servlet-api-3.1.0.jar" />
+		<fileset dir="lib" includes="jetty-io-9.2.13.v20150730.jar" />
+		<fileset dir="lib" includes="jetty-util-9.2.13.v20150730.jar" />
+		<fileset dir="lib" includes="jna-4.1.0.jar" />
+		<fileset dir="lib" includes="jna-platform-4.1.0.jar" />
+		<fileset dir="lib" includes="junit-4.12.jar" />
+		<fileset dir="lib" includes="log4j-api-2.7.jar" />
+		<fileset dir="lib" includes="log4j-core-2.7.jar" />
+		<fileset dir="lib" includes="neko-htmlunit-2.23.jar" />
+		<fileset dir="lib" includes="netty-3.5.7.Final.jar" />
+		<fileset dir="lib" includes="phantomjsdriver-1.3.0.jar" />
+		<fileset dir="lib" includes="sac-1.3.jar" />
+		<fileset dir="lib" includes="serializer-2.7.2.jar" />
+		<fileset dir="lib" includes="websocket-api-9.2.15.v20160210.jar" />
+		<fileset dir="lib" includes="websocket-client-9.2.15.v20160210.jar" />
+		<fileset dir="lib" includes="websocket-common-9.2.15.v20160210.jar" />
+		<fileset dir="lib" includes="xalan-2.7.2.jar" />
+		<fileset dir="lib" includes="xercesImpl-2.11.0.jar" />
+		<fileset dir="lib" includes="xml-apis-1.4.01.jar" />
+		<fileset dir="lib" includes="saxon-8.7.jar" />	
+		<fileset dir="lib" includes="testng-6.8.jar" />
+		<fileset dir="lib" includes="feed4testng-1.0.jar" />
+		<fileset dir="lib" includes="platform.jar" />
+		<fileset dir="lib" includes="poi-3.5-beta6.jar" />
+		<fileset dir="lib" includes="SaxonLiaison.jar" />
+		<fileset dir="lib" includes="validation-api-1.0.0.GA.jar" />
+		
+		<!--<fileset dir="lib" includes= "slf4j-api-1.6.4.jar" />-->
+	</path>
+
+	<!-- delete the output folder if it exists -->
+	<delete dir="${dest.dir}" failonerror="false" />
+	<!-- create the output folder -->
+	<mkdir dir="${dest.dir}" />
+	<mkdir dir="${dest.report}" />
+	<mkdir dir="${dest.report2}" />
+	<!-- delete the failed report if it exists -->
+	<delete file="${basedir}/report/testng-failed.xml" />
+
+	<!-- target to compile all test classes out -->
+	<target name="build">
+
+		<!-- do copy -->
+		<copy todir="${dest.dir}/conf">
+			<fileset dir="${conf.dir}" />
+		</copy>
+		<!-- do copy -->
+		<copy todir="${dest.dir}/">
+					<fileset dir="${resource.dir}" />
+				</copy>
+
+		<!-- do copy -->
+		<copy todir="${dest.dir}/browsers">
+			<fileset dir="${browsers.dir}" />
+		</copy>
+		
+
+		<!-- compile -->
+		<javac srcdir="${src.dir}" destdir="${dest.dir}" encoding="UTF-8" debug="true" fork="yes">
+			<classpath refid="jarfile" />
+		</javac>
+
+	</target>
+
+	<!-- define the TestNG task -->
+
+	<taskdef name="testng" classname="com.beust.testng.TestNGAntTask" classpathref="jarfile" />
+
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+		<classpath>
+			<pathelement location="lib/ant-contrib-1.0b3.jar" />
+		</classpath>
+	</taskdef>
+
+	<!-- run test cases the first time -->
+	<target name="uiTestOnIE" depends="build">
+		<testng classpathref="jarfile" outputDir="${dest.report}" haltOnFailure="false">
+			<classfileset dir="${dest.dir}" includes="*.class" />
+			<classpath>
+				<pathelement path="${dest.dir}" />
+			</classpath>
+			<xmlfileset dir="${basedir}" includes="testng.xml" />
+		</testng>
+	</target>
+
+	<target name="transform" depends="uiTestOnIE">
+		<xslt in="${basedir}/report/testng-results.xml" style="${basedir}/browsers/testng-results.xsl" out="${basedir}/report/index2.html" classpathref="jarfile" processor="SaxonLiaison">
+			<!-- you need to specify the directory here again -->
+			<param name="testNgXslt.outputDir" expression="${basedir}/report/" />
+			<param name="testNgXslt.showRuntimeTotals" expression="true" />
+			<classpath refid="jarfile" />
+		</xslt>
+	</target>
+
+	<!-- run failed cases -->
+	<target name="uiTestOnIE2" if="fileIsExists" depends="detect.file">
+		<testng classpathref="jarfile" outputDir="${dest.report2}" haltOnFailure="false">
+			<classfileset dir="${dest.dir}" includes="*.class" />
+			<classpath>
+				<pathelement path="${dest.dir}" />
+			</classpath>
+			<xmlfileset dir="${basedir}/report" includes="testng-failed.xml" />
+		</testng>
+	</target>
+
+	<target name="transform2" if="fileIsExists" depends="uiTestOnIE2">
+		<xslt in="${basedir}/report2/testng-results.xml" style="${basedir}/browsers/testng-results.xsl" out="${basedir}/report2/index2.html" classpathref="jarfile" processor="SaxonLiaison">
+			<!-- you need to specify the directory here again -->
+			<param name="testNgXslt.outputDir" expression="${basedir}/report2/" />
+			<param name="testNgXslt.showRuntimeTotals" expression="true" />
+			<classpath refid="jarfile" />
+		</xslt>
+	</target>
+
+	<target name="detect.file" depends="transform">
+		<condition property="fileIsExists">
+			<and>
+				<available file="${basedir}/report/testng-failed.xml" />
+			</and>
+		</condition>
+	</target>
+</project>
