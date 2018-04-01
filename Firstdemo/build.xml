@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name= "FirstDemo" basedir= "." default="transform">
+	<!-- 工程名字-->
+    <property name= "lib.dir" value= "lib" />   
+    <path id= "test.classpath" >
+        <fileset dir= "${lib.dir}" includes= "*.jar" />
+    </path>
+    <target name= "transform" >
+           <xslt in= "E:\workspace\FirstDemo\test-output\testng-results.xml" 
+                 style= "E:\workspace\FirstDemo\test-output\testng-results.xsl"  
+                 out= "E:\workspace\FirstDemo\test-output\TestReport\index1.html " >
+           	<!--工程目录、工程目录、生成目录-->
+                <param name= "testNgXslt.outputDir" expression= "E:\workspace\FirstDemo\test-output\TestReport" />
+           	<!--工程目录-->
+           	<classpath refid= "test.classpath" />
+           </xslt>
+    </target>
+	<!--{name} ：是项目的名字；
+	{in}和{style}：对应的是testng生成报告的xml和xsl；
+	{out}：是要用testNG-xslt生成报告的文件名和路径；
+	{expression}：是要用testNG-xslt生成报告的路径；-->
+</project>

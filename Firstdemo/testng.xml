@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+  <suite name="testuite" parallel="tests" thread-count="1">
+<!--<suite name="testuite" parallel="false" >-->
+	<listeners>
+        <listener class-name="com.util.RetryListener"/>
+    </listeners>
+	<test name="Test">
+		<classes>
+			<class name="com.cases.LoginCase" />
+		</classes>
+	</test>
+</suite>
